@@ -91,7 +91,7 @@
   .b.in{align-self:flex-start;background:var(--bubble-in);border-bottom-left-radius:6px}
   .b.out{align-self:flex-end;background:var(--purple);color:#fff;border-bottom-right-radius:6px}
   .b.out.auto{background:#6c4ea0}
-  .b.out.invite{background:#3b2263}
+  .b.out.invite,.b.out.reminder{background:#3b2263}
   .b.out.failed{background:var(--fail-bg);color:var(--fail);border:1px solid var(--fail)}
   .b a{color:inherit}
   .stamp{font-size:11px;color:var(--muted);margin:0 6px 6px}
@@ -300,7 +300,7 @@ function renderChat(forceScroll){
     if (!next || next.dir !== m.dir || (new Date(next.at) - new Date(m.at)) > 5 * 60000) {
       let label = fmtTime(m.at);
       if (m.dir === "out") {
-        const who = m.kind === "invite" ? "Invite" : m.kind === "auto" ? "Atlas auto-reply" : "You";
+        const who = m.kind === "invite" ? "Invite" : m.kind === "reminder" ? "Reminder" : m.kind === "auto" ? "Atlas auto-reply" : "You";
         const st = failed ? `Not delivered${m.error ? " (" + esc(m.error) + ")" : ""}` : (m.status && m.status !== "auto-reply" ? m.status[0].toUpperCase() + m.status.slice(1) : "");
         label = [who, label, st].filter(Boolean).join(" · ");
       }
