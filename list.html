@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>SAE BBQ Guest List</title>
+<meta property="og:title" content="SAE Barbecue · Live Guest List">
+<meta property="og:description" content="Who's coming Wednesday, Nov 4">
+<style>
+  :root{
+    --purple:#4b2a7b; --purple-deep:#2a1349; --purple-ink:#21103b; --gold:#e3c26b; --gold-deep:#b8952f; --gold-soft:#f6ecd0;
+    --ink:#1d1428; --muted:#6c6178; --card:#fff; --bg:#f4f0f8; --line:#e7e0f0;
+    --go:#2f7d4f; --go-soft:#e3f2e8; --no:#a23b3b; --no-soft:#f8e3e3; --wait:#7a7090; --wait-soft:#eeebf3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--bg)}
+  body{background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;color:#fff;background:
+      radial-gradient(1200px 400px at 85% -10%, rgba(227,194,107,.22), transparent 60%),
+      radial-gradient(900px 500px at -10% 120%, rgba(139,92,214,.35), transparent 60%),
+      linear-gradient(165deg,var(--purple),var(--purple-deep) 70%,var(--purple-ink));
+    padding:28px 16px 34px}
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--gold-deep))}
+  .wrap{max-width:1080px;margin:0 auto;position:relative}
+  .toprow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .letters{font-size:14px;letter-spacing:.42em;color:var(--gold)}
+  .live{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#efe6fb;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:6px 11px;border-radius:99px}
+  .live i{width:8px;height:8px;border-radius:50%;background:#5fd38d;box-shadow:0 0 0 0 rgba(95,211,141,.7);animation:pulse 2s infinite}
+  .live.stale i{background:#e3a24f;animation:none}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(95,211,141,.6)}70%{box-shadow:0 0 0 9px rgba(95,211,141,0)}100%{box-shadow:0 0 0 0 rgba(95,211,141,0)}}
+  .heroGrid{display:grid;grid-template-columns:1fr;gap:26px;margin-top:22px;align-items:center}
+  @media (min-width:820px){.heroGrid{grid-template-columns:1.25fr 1fr}}
+  .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+  h1{font-size:clamp(34px,7vw,52px);line-height:1.02;font-weight:500;margin-top:8px;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--gold)}
+  .details{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .details span{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:#ece3f8;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:7px 12px;border-radius:10px}
+  .details svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .countdown{margin-top:14px;font-size:14px;color:#d9cdee}
+  .countdown b{color:#fff;font-variant-numeric:tabular-nums}
+
+  .scoreCard{display:flex;gap:22px;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:20px;backdrop-filter:blur(4px)}
+  .ring{flex:none;width:150px;height:150px;position:relative}
+  .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring circle{fill:none;stroke-width:13;transition:stroke-dasharray .8s cubic-bezier(.2,.8,.2,1), stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)}
+  .ring .center{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+  .ring .big{font-size:44px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+  .ring .lbl{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#d9cdee;margin-top:4px}
+  .legend{display:grid;gap:10px;flex:1;min-width:0}
+  .legend div{display:flex;align-items:center;gap:10px;font-size:15px;color:#efe6fb}
+  .legend .sw{width:12px;height:12px;border-radius:4px;flex:none}
+  .legend b{margin-left:auto;font-size:20px;font-variant-numeric:tabular-nums;color:#fff}
+  .legend .rate{font-size:13px;color:#cbbde3;border-top:1px solid rgba(255,255,255,.14);padding-top:10px;margin-top:2px}
+  @media (max-width:560px){
+    .hero{padding-bottom:26px}
+    .heroGrid{gap:18px;margin-top:16px}
+    .scoreCard{gap:16px;padding:16px}
+    .ring{width:112px;height:112px}
+    .ring .big{font-size:34px}
+    .legend div{font-size:14px}
+    .legend b{font-size:17px}
+  }
+  @media (max-width:330px){.scoreCard{flex-direction:column;text-align:center}.legend{width:100%}}
+
+  /* ---------- feed ---------- */
+  main{padding:0 16px 48px}
+  .feed{margin-top:-1px;background:#fff;border:1px solid var(--line);border-top:0;border-radius:0 0 18px 18px;padding:12px 16px;display:flex;gap:10px;align-items:center;overflow:hidden;box-shadow:0 8px 24px rgba(46,22,80,.06)}
+  .feed .tag{flex:none;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--purple)}
+  .feedItems{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent)}
+  .feedItems::-webkit-scrollbar{display:none}
+  .fi{flex:none;display:inline-flex;align-items:center;gap:6px;font-size:13px;background:var(--wait-soft);border-radius:99px;padding:5px 10px 5px 6px;white-space:nowrap}
+  .fi .d{width:18px;height:18px;border-radius:50%;display:grid;place-items:center}
+  .fi .d svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+  .fi span{color:var(--muted)}
+
+  /* ---------- controls ---------- */
+  .controls{display:flex;gap:10px;margin:22px 0 14px;flex-wrap:wrap;align-items:center}
+  .seg{display:flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px;gap:2px}
+  .seg button{border:0;background:none;font:inherit;font-size:14px;font-weight:650;color:var(--muted);padding:8px 12px;border-radius:9px;cursor:pointer;display:flex;gap:6px;align-items:center;white-space:nowrap}
+  .seg button b{font-variant-numeric:tabular-nums;font-weight:800}
+  .seg button[aria-pressed="true"]{background:var(--purple);color:#fff}
+  .search{flex:1 1 200px;position:relative}
+  .search input{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px 11px 38px;font:inherit;font-size:15px;background:#fff;color:var(--ink)}
+  .search input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(75,42,123,.12)}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+  @media (min-width:900px){.seg{display:none}}
+
+  /* ---------- columns ---------- */
+  .cols{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+  @media (min-width:900px){.cols{grid-template-columns:1.15fr 1fr 1fr}}
+  .col{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 1px 2px rgba(46,22,80,.04)}
+  @media (max-width:899px){.col{display:none}.col.show{display:block}}
+  .colH{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .colH .ic{width:30px;height:30px;border-radius:10px;display:grid;place-items:center}
+  .colH .ic svg{width:16px;height:16px;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+  .colH h2{font-size:16px;font-weight:750}
+  .colH .n{margin-left:auto;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+  .people{list-style:none;max-height:none}
+  .p{display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid #f2eef7;transition:background 1.2s ease}
+  .p:first-child{border-top:0}
+  .p.fresh{background:var(--gold-soft)}
+  .av{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff;letter-spacing:.02em}
+  .who{min-width:0;flex:1}
+  .who .nm{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .who .sub{font-size:12.5px;color:var(--muted)}
+  .badge{flex:none;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--wait-soft);color:var(--wait)}
+  .badge.seen{background:var(--gold-soft);color:#7a5c0e}
+  .badge.bad{background:#fbe5da;color:#b4441b}
+  .badge.new{background:var(--gold);color:var(--purple-ink)}
+  .emptyCol{padding:22px 16px;color:var(--muted);font-size:14px;text-align:center}
+  .foot{margin-top:26px;text-align:center;color:var(--muted);font-size:13px}
+  .gate{max-width:440px;margin:70px auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center;color:var(--muted)}
+  .skel{height:14px;border-radius:7px;background:linear-gradient(90deg,#eee9f4,#f7f4fa,#eee9f4);background-size:200% 100%;animation:sh 1.2s infinite;margin:14px 16px}
+  @keyframes sh{to{background-position:-200% 0}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="wrap">
+    <div class="toprow">
+      <div class="letters serif">ΣΑΕ</div>
+      <div class="live" id="live"><i></i><span id="liveTxt">Live</span></div>
+    </div>
+    <div class="heroGrid">
+      <div>
+        <div class="kicker">The guest list</div>
+        <h1 class="serif">SAE <em>Barbecue</em></h1>
+        <div class="details">
+          <span><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Wednesday, Nov 4</span>
+          <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>5 to 8 PM</span>
+          <span><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>The SAE house</span>
+        </div>
+        <div class="countdown" id="countdown"></div>
+      </div>
+      <div class="scoreCard">
+        <div class="ring" aria-hidden="true">
+          <svg viewBox="0 0 160 160" id="ringSvg">
+            <circle cx="80" cy="80" r="66" stroke="rgba(255,255,255,.12)"/>
+            <circle id="rGo" cx="80" cy="80" r="66" stroke="#5fd38d" stroke-dasharray="0 999"/>
+            <circle id="rNo" cx="80" cy="80" r="66" stroke="#e07a7a" stroke-dasharray="0 999"/>
+          </svg>
+          <div class="center"><div><div class="big" id="bigGo">–</div><div class="lbl">Going</div></div></div>
+        </div>
+        <div class="legend">
+          <div><span class="sw" style="background:#5fd38d"></span>Going<b id="lGo">–</b></div>
+          <div><span class="sw" style="background:rgba(255,255,255,.35)"></span>No answer yet<b id="lWait">–</b></div>
+          <div><span class="sw" style="background:#e07a7a"></span>Can't make it<b id="lNo">–</b></div>
+          <div class="rate" id="rate">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap" id="app">
+  <div class="feed"><span class="tag">Latest</span><div class="feedItems" id="feed"><span class="fi"><span>Loading…</span></span></div></div>
+
+  <div class="controls">
+    <div class="seg" id="seg" role="tablist">
+      <button data-c="going" aria-pressed="true">Going <b id="sGo">–</b></button>
+      <button data-c="wait" aria-pressed="false">No answer <b id="sWait">–</b></button>
+      <button data-c="no" aria-pressed="false">Can't go <b id="sNo">–</b></button>
+    </div>
+    <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="q" placeholder="Find someone" aria-label="Find someone"></label>
+  </div>
+
+  <div class="cols">
+    <section class="col show" id="col-going">
+      <div class="colH"><span class="ic" style="background:var(--go-soft)"><svg viewBox="0 0 24 24" style="stroke:var(--go)"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><h2>Going</h2><span class="n" id="nGo" style="color:var(--go)">–</span></div>
+      <ul class="people" id="lstGo"><li class="skel"></li><li class="skel"></li><li class="skel"></li></ul>
+    </section>
+    <section class="col" id="col-wait">
+      <div class="colH"><span class="ic" style="background:var(--wait-soft)"><svg viewBox="0 0 24 24" style="stroke:var(--wait)"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/></svg></span><h2>No answer yet</h2><span class="n" id="nWait" style="color:var(--wait)">–</span></div>
+      <ul class="people" id="lstWait"><li class="skel"></li><li class="skel"></li></ul>
+    </section>
+    <section class="col" id="col-no">
+      <div class="colH"><span class="ic" style="background:var(--no-soft)"><svg viewBox="0 0 24 24" style="stroke:var(--no)"><path d="M7 7l10 10M17 7L7 17"/></svg></span><h2>Can't make it</h2><span class="n" id="nNo" style="color:var(--no)">–</span></div>
+      <ul class="people" id="lstNo"><li class="skel"></li></ul>
+    </section>
+  </div>
+  <p class="foot">Updates on its own every few seconds. View only.</p>
+</main>
+
+<script>
+const SB_URL = "https://dvschwyfeuarpaoyfoko.supabase.co";
+const SB_KEY = "sb_publishable_WPDhozNdc55NGL76azocCA_iho3vl_Z";
+const KEY = new URLSearchParams(location.hash.slice(1)).get("v") || "";
+const START = new Date("2026-11-04T23:00:00Z"), END = new Date("2026-11-05T02:00:00Z");
+const $ = (id) => document.getElementById(id);
+const C = 2 * Math.PI * 66;
+let people = [], prev = null, freshIds = new Set(), lastOk = 0;
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const AV = ["#4b2a7b","#6b3fa0","#2e5e8c","#2f7d4f","#8a5a14","#7a2f5a","#3f4c9a","#5b6b2a"];
+const hue = (s) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return AV[h % AV.length]; };
+const initials = (p) => ((p.first[0] || "") + (p.last[0] || "")).toUpperCase();
+function ago(iso){
+  if (!iso) return "";
+  const s = Math.max(0, (Date.now() - new Date(iso)) / 1000);
+  if (s < 60) return "just now";
+  if (s < 3600) return Math.floor(s / 60) + "m ago";
+  if (s < 86400) return Math.floor(s / 3600) + "h ago";
+  return new Date(iso).toLocaleDateString([], { weekday: "short" }) + " " + new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
+const bucket = (p) => p.status === "going" ? "going" : p.status === "not_going" ? "no" : "wait";
+
+function row(p){
+  const b = bucket(p), fresh = freshIds.has(p.id);
+  let right = "", sub = "";
+  if (b === "going") sub = `Said yes ${ago(p.responded_at)}`;
+  if (b === "no") sub = `Answered ${ago(p.responded_at)}`;
+  if (b === "wait") {
+    sub = p.unreachable ? "Text didn't go through" : p.opened ? "Opened the invite" : "Hasn't opened the invite";
+    right = p.unreachable ? `<span class="badge bad">Unreachable</span>` : p.opened ? `<span class="badge seen">Seen</span>` : "";
+  }
+  if (fresh) right = `<span class="badge new">New</span>`;
+  return `<li class="p ${fresh ? "fresh" : ""}" data-id="${p.id}">
+    <span class="av" style="background:${hue(p.first + p.last)}">${esc(initials(p))}</span>
+    <div class="who"><div class="nm">${esc(p.first)} ${esc(p.last)}</div><div class="sub">${sub}</div></div>${right}</li>`;
+}
+
+function render(){
+  const q = $("q").value.trim().toLowerCase();
+  const match = (p) => !q || `${p.first} ${p.last}`.toLowerCase().includes(q);
+  const g = people.filter(p => bucket(p) === "going");
+  const w = people.filter(p => bucket(p) === "wait");
+  const n = people.filter(p => bucket(p) === "no");
+  const total = people.length || 1;
+
+  g.sort((a, b) => String(b.responded_at).localeCompare(String(a.responded_at)));
+  n.sort((a, b) => String(b.responded_at).localeCompare(String(a.responded_at)));
+  w.sort((a, b) => (b.opened - a.opened) || (a.unreachable - b.unreachable) || a.last.localeCompare(b.last));
+
+  // ring
+  const gLen = C * g.length / total, nLen = C * n.length / total;
+  $("rGo").setAttribute("stroke-dasharray", `${gLen} ${C}`);
+  $("rNo").setAttribute("stroke-dasharray", `${nLen} ${C}`);
+  $("rNo").setAttribute("stroke-dashoffset", `${-(C - nLen)}`);
+  $("bigGo").textContent = g.length;
+  $("lGo").textContent = $("nGo").textContent = $("sGo").textContent = g.length;
+  $("lWait").textContent = $("nWait").textContent = $("sWait").textContent = w.length;
+  $("lNo").textContent = $("nNo").textContent = $("sNo").textContent = n.length;
+  const answered = g.length + n.length;
+  $("rate").textContent = `${answered} of ${people.length} have answered · ${Math.round(100 * answered / total)}%`;
+
+  const fill = (el, arr, empty) => {
+    const list = arr.filter(match);
+    $(el).innerHTML = list.length ? list.map(row).join("") : `<li class="emptyCol">${q ? "No match" : empty}</li>`;
+  };
+  fill("lstGo", g, "Nobody yet");
+  fill("lstWait", w, "Everyone has answered");
+  fill("lstNo", n, "Nobody so far");
+
+  // feed
+  const recent = people.filter(p => p.responded_at && p.status !== "pending")
+    .sort((a, b) => String(b.responded_at).localeCompare(String(a.responded_at))).slice(0, 8);
+  $("feed").innerHTML = recent.length ? recent.map(p => {
+    const yes = p.status === "going";
+    return `<span class="fi"><span class="d" style="background:${yes ? "var(--go)" : "var(--no)"}">${yes
+      ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+      : '<svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>'}</span><b>${esc(p.first)} ${esc(p.last[0] || "")}.</b><span>${yes ? "is in" : "is out"} · ${ago(p.responded_at)}</span></span>`;
+  }).join("") : `<span class="fi"><span>No answers yet</span></span>`;
+}
+
+function countdown(){
+  const now = new Date();
+  let txt;
+  if (now < START) {
+    const m = Math.round((START - now) / 60000), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
+    txt = `Starts in <b>${d ? d + "d " : ""}${h}h ${String(mm).padStart(2, "0")}m</b>`;
+  } else if (now < END) txt = `<b>Happening now</b> until 8 PM`;
+  else txt = `That's a wrap. Thanks for coming.`;
+  $("countdown").innerHTML = txt;
+}
+
+async function load(){
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/rpc/public_board`, {
+      method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY }, body: JSON.stringify({ k: KEY })
+    });
+    if (r.status === 401 || r.status === 403) return gate();
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    const next = d.people || [];
+    if (prev) {
+      const before = Object.fromEntries(prev.map(p => [p.id, p.status]));
+      next.forEach(p => { if (before[p.id] !== undefined && before[p.id] !== p.status) { freshIds.add(p.id); setTimeout(() => { freshIds.delete(p.id); render(); }, 12000); } });
+    }
+    prev = next; people = next; lastOk = Date.now();
+    $("live").classList.remove("stale"); $("liveTxt").textContent = "Live";
+    render();
+  } catch (e) {
+    if (Date.now() - lastOk > 30000) { $("live").classList.add("stale"); $("liveTxt").textContent = "Reconnecting"; }
+  }
+}
+function gate(){
+  document.querySelector(".scoreCard").style.visibility = "hidden";
+  $("app").innerHTML = `<div class="gate">This link isn't complete. Ask James for the full guest list link.</div>`;
+  $("live").style.display = "none";
+}
+
+document.querySelectorAll("#seg button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#seg button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  document.querySelectorAll(".col").forEach(c => c.classList.toggle("show", c.id === "col-" + b.dataset.c));
+});
+$("q").oninput = render;
+
+countdown(); setInterval(countdown, 30000);
+if (!KEY) gate();
+else {
+  load();
+  setInterval(() => { if (!document.hidden) load(); }, 8000);
+  setInterval(() => { if (people.length) render(); }, 60000); // refresh "x min ago"
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+}
+</script>
+</body>
+</html>
