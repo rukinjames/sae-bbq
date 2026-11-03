@@ -11,9 +11,11 @@
     --ink:#1d1428; --muted:#6c6178; --card:#fff; --bg:#f4f0f8; --line:#e4dcef;
     --go:#2f7d4f; --go-bg:#e3f2e8; --no:#a23b3b; --no-bg:#f8e3e3;
     --open:#8a6a12; --open-bg:#f6ecd0; --wait:#5d5470; --wait-bg:#ece8f2; --fail:#b4441b; --fail-bg:#fbe5da;
+    --msg:#2563a8; --msg-bg:#e2edf9; --bubble-in:#ece8f2;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body.locked{overflow:hidden}
   header{background:linear-gradient(160deg,var(--purple),var(--purple-deep));color:#fff;padding:22px 16px 20px;border-bottom:4px solid var(--gold)}
   .wrap{max-width:980px;margin:0 auto}
   .top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
@@ -27,37 +29,84 @@
   .bar{height:12px;border-radius:99px;overflow:hidden;display:flex;background:var(--wait-bg);margin:4px 0 16px}
   .bar span{display:block;height:100%}
   .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-  .tile{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+  .tile{position:relative;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit}
   .tile[aria-pressed="true"]{border-color:var(--purple);box-shadow:0 0 0 3px rgba(75,42,123,.15)}
   .tile .n{font-size:28px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
   .tile .l{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .tile .new{position:absolute;top:10px;right:10px;background:var(--msg);color:#fff;font-size:12px;font-weight:700;border-radius:99px;padding:2px 8px}
   .dot{width:9px;height:9px;border-radius:50%;flex:none}
   .tools{display:flex;gap:10px;margin:16px 0 10px;flex-wrap:wrap;align-items:center}
   .tools input[type=search]{flex:1 1 220px;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;background:#fff;color:var(--ink)}
   .tools button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
   .tools label{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
   .list{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 14px;border-top:1px solid var(--line);align-items:center}
+  .row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 14px;border-top:1px solid var(--line);align-items:center;cursor:pointer;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;font:inherit;color:inherit;text-align:left}
   .row:first-child{border-top:0}
-  .name{font-weight:700}
-  .name small{font-weight:500;color:var(--muted);margin-left:6px}
+  .row:hover{background:#faf8fd}
+  .name{font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .name small{font-weight:500;color:var(--muted)}
+  .chip{font-size:12px;font-weight:700;color:var(--msg);background:var(--msg-bg);border-radius:99px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px}
+  .chip.unread{background:var(--msg);color:#fff}
+  .chip svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
   .meta{grid-column:1/2;font-size:13px;color:var(--muted)}
   .meta .reply{color:var(--ink);font-style:italic}
-  .pill{grid-row:1/3;grid-column:2;justify-self:end;font-size:13px;font-weight:700;padding:5px 10px;border-radius:99px;white-space:nowrap}
-  .acts{grid-column:1/2;display:flex;gap:12px;font-size:13px}
-  .acts a{color:var(--purple);font-weight:600;text-decoration:none}
+  .pill{grid-row:1/4;grid-column:2;justify-self:end;font-size:13px;font-weight:700;padding:5px 10px;border-radius:99px;white-space:nowrap}
+  .phone{grid-column:1/2;font-size:13px;color:var(--muted)}
   .empty{padding:24px;text-align:center;color:var(--muted)}
   .unmatched{margin-top:18px}
   .unmatched h2{font-size:15px;margin-bottom:8px}
+  .unmatched .row{cursor:default}
   .gate{max-width:440px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--muted)}
-  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60}
   .toast.on{opacity:1}
   @media (min-width:720px){
-    .row{grid-template-columns:minmax(180px,1.2fr) 2fr auto auto;grid-template-rows:auto}
-    .meta{grid-column:auto}
-    .acts{grid-column:auto}
+    .row{grid-template-columns:minmax(200px,1.2fr) 2fr auto auto;grid-template-rows:auto}
+    .meta,.phone{grid-column:auto}
     .pill{grid-row:auto;grid-column:auto}
   }
+
+  /* ---------- chat panel ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(29,20,40,.42);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .chat{position:fixed;z-index:50;background:#fff;display:flex;flex-direction:column;
+        left:0;right:0;bottom:0;height:88vh;height:88dvh;border-radius:20px 20px 0 0;transform:translateY(102%);transition:transform .25s ease}
+  .chat.on{transform:none}
+  @media (min-width:860px){
+    .chat{left:auto;top:0;bottom:0;width:440px;height:auto;border-radius:0;transform:translateX(102%);box-shadow:-8px 0 30px rgba(46,22,80,.18)}
+  }
+  .chat-h{padding:14px 16px 12px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+  .chat-h .who{font-weight:800;font-size:18px}
+  .chat-h .num{font-size:13px;color:var(--muted)}
+  .chat-h .num a{color:var(--purple);font-weight:600;text-decoration:none;margin-left:8px}
+  .x{grid-row:1/3;grid-column:2;width:36px;height:36px;border-radius:50%;border:0;background:var(--wait-bg);cursor:pointer;display:grid;place-items:center}
+  .x svg{width:16px;height:16px;stroke:var(--ink);stroke-width:2.4;fill:none;stroke-linecap:round}
+  .setstat{grid-column:1/3;display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center}
+  .setstat span{font-size:12px;color:var(--muted);margin-right:2px}
+  .setstat button{font:inherit;font-size:13px;font-weight:700;border-radius:99px;padding:5px 11px;border:1.5px solid var(--line);background:#fff;cursor:pointer;color:var(--ink)}
+  .setstat button.cur-going{background:var(--go-bg);color:var(--go);border-color:var(--go)}
+  .setstat button.cur-not_going{background:var(--no-bg);color:var(--no);border-color:var(--no)}
+  .setstat button.cur-pending{background:var(--wait-bg);border-color:var(--wait)}
+  .thread{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:6px;background:#fbfafd;overscroll-behavior:contain}
+  .b{max-width:82%;padding:9px 12px;border-radius:18px;white-space:pre-wrap;word-wrap:break-word;font-size:15px;line-height:1.35}
+  .b.in{align-self:flex-start;background:var(--bubble-in);border-bottom-left-radius:6px}
+  .b.out{align-self:flex-end;background:var(--purple);color:#fff;border-bottom-right-radius:6px}
+  .b.out.auto{background:#6c4ea0}
+  .b.out.invite{background:#3b2263}
+  .b.out.failed{background:var(--fail-bg);color:var(--fail);border:1px solid var(--fail)}
+  .b a{color:inherit}
+  .stamp{font-size:11px;color:var(--muted);margin:0 6px 6px}
+  .stamp.in{align-self:flex-start}
+  .stamp.out{align-self:flex-end;text-align:right}
+  .day{align-self:center;font-size:12px;color:var(--muted);margin:8px 0 4px}
+  .compose{border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#fff}
+  .compose .hint{font-size:12px;color:var(--muted);margin:0 4px 6px;display:flex;justify-content:space-between;gap:8px}
+  .compose .box{display:flex;gap:8px;align-items:flex-end}
+  .compose textarea{flex:1;resize:none;border:1.5px solid var(--line);border-radius:18px;padding:10px 14px;font:inherit;font-size:16px;line-height:1.35;max-height:140px;min-height:44px;color:var(--ink);background:#fff}
+  .compose textarea:focus{outline:none;border-color:var(--purple)}
+  .send{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:var(--purple);cursor:pointer;display:grid;place-items:center}
+  .send:disabled{opacity:.4;cursor:default}
+  .send svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .sendErr{color:var(--fail);font-size:13px;margin:6px 4px 0;min-height:0}
 </style>
 </head>
 <body>
@@ -82,11 +131,31 @@
   <div class="list" id="list"></div>
   <div class="unmatched" id="unmatched"></div>
 </main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="chat" id="chat" aria-hidden="true" role="dialog" aria-label="Conversation">
+  <div class="chat-h">
+    <div class="who" id="cWho"></div>
+    <button class="x" id="cClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="num" id="cNum"></div>
+    <div class="setstat" id="cStat"></div>
+  </div>
+  <div class="thread" id="cThread"></div>
+  <div class="compose">
+    <div class="hint"><span>Sends from Atlas's number</span><span id="cCount"></span></div>
+    <div class="box">
+      <textarea id="cText" rows="1" placeholder="Text message"></textarea>
+      <button class="send" id="cSend" aria-label="Send" disabled><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+    </div>
+    <div class="sendErr" id="cErr"></div>
+  </div>
+</aside>
 <div class="toast" id="toast"></div>
 
 <script>
 const SB_URL = "https://dvschwyfeuarpaoyfoko.supabase.co";
 const SB_KEY = "sb_publishable_WPDhozNdc55NGL76azocCA_iho3vl_Z";
+const FN = SB_URL + "/functions/v1/sms";
 const KEY = new URLSearchParams(location.hash.slice(1)).get("k") || "";
 const $ = (id) => document.getElementById(id);
 
@@ -99,7 +168,13 @@ const STAGES = [
   { id: "unsent",   label: "Not texted yet",      color: "#9a93a6",     bg: "#f1eff4" },
 ];
 const byId = Object.fromEntries(STAGES.map(s => [s.id, s]));
-let data = null, filter = "all";
+let data = null, filter = "all", openId = null;
+
+// "seen" marks for unread replies live in this browser only
+let seen = {};
+try { seen = JSON.parse(localStorage.getItem("bbq_seen") || "{}"); } catch {}
+function markSeen(p){ if (!p?.last_reply_at) return; seen[p.id] = p.last_reply_at; try { localStorage.setItem("bbq_seen", JSON.stringify(seen)); } catch {} }
+const unread = (p) => p.last_reply_at && (!seen[p.id] || seen[p.id] < p.last_reply_at);
 
 function stage(p){
   if (p.status === "going") return "going";
@@ -115,51 +190,61 @@ const fmtTime = (iso) => {
   const t = d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   return d.toDateString() === now.toDateString() ? t : d.toLocaleDateString([], { weekday: "short" }) + " " + t;
 };
-const fmtPhone = (p) => { const m = p.match(/^\+1(\d{3})(\d{3})(\d{4})$/); return m ? `(${m[1]}) ${m[2]}-${m[3]}` : p; };
-
-function people(){
-  return (data?.invites || []).filter(p => $("showTest").checked || !p.is_test);
-}
+const fmtPhone = (p) => { const m = (p||"").match(/^\+1(\d{3})(\d{3})(\d{4})$/); return m ? `(${m[1]}) ${m[2]}-${m[3]}` : p; };
+const viaLabel = (v) => v === "sms" ? "text" : v === "james" ? "you" : "link";
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+function linkify(s){ return esc(s).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>'); }
+function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("on"); setTimeout(() => el.classList.remove("on"), 1800); }
+const people = () => (data?.invites || []).filter(p => $("showTest").checked || !p.is_test);
+const MSG = '<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>';
 
 function render(){
   const all = people();
   const counts = Object.fromEntries(STAGES.map(s => [s.id, 0]));
   all.forEach(p => counts[stage(p)]++);
+  const texted = all.filter(p => p.reply_count > 0);
+  const unreadN = texted.filter(unread).length;
 
   $("bar").innerHTML = STAGES.filter(s => counts[s.id]).map(s =>
     `<span style="width:${100*counts[s.id]/all.length}%;background:${s.color}" title="${s.label}"></span>`).join("");
 
-  const tiles = [{ id: "all", label: "Everyone", color: "var(--purple)" }, ...STAGES]
-    .filter(s => s.id === "all" || counts[s.id] || ["going","not_going","opened","waiting"].includes(s.id));
+  const tiles = [{ id: "all", label: "Everyone", color: "var(--purple)", n: all.length },
+    { id: "texted", label: "Texted back", color: "var(--msg)", n: texted.length, badge: unreadN },
+    ...STAGES.map(s => ({ ...s, n: counts[s.id] }))]
+    .filter(s => ["all","texted","going","not_going","opened","waiting"].includes(s.id) || s.n);
   $("tiles").innerHTML = tiles.map(s => `
     <button class="tile" data-f="${s.id}" aria-pressed="${filter === s.id}">
-      <div class="n">${s.id === "all" ? all.length : counts[s.id]}</div>
+      ${s.badge ? `<span class="new">${s.badge} new</span>` : ""}
+      <div class="n">${s.n}</div>
       <div class="l"><span class="dot" style="background:${s.color}"></span>${s.label}</div>
     </button>`).join("");
   document.querySelectorAll(".tile").forEach(b => b.onclick = () => { filter = b.dataset.f; render(); });
 
-  const q = $("q").value.trim().toLowerCase();
-  const rows = all.filter(p => (filter === "all" || stage(p) === filter) &&
-    (!q || `${p.first} ${p.last} ${p.phone}`.toLowerCase().includes(q) || p.phone.replace(/\D/g,"").includes(q.replace(/\D/g,"") || "@@")));
+  const q = $("q").value.trim().toLowerCase(), qd = q.replace(/\D/g, "");
+  const rows = all.filter(p => (filter === "all" || (filter === "texted" ? p.reply_count > 0 : stage(p) === filter)) &&
+    (!q || `${p.first} ${p.last}`.toLowerCase().includes(q) || (qd && p.phone.replace(/\D/g,"").includes(qd))));
 
   const order = { going: 0, not_going: 1, opened: 2, waiting: 3, failed: 4, unsent: 5 };
-  rows.sort((a, b) => order[stage(a)] - order[stage(b)] || a.last.localeCompare(b.last));
+  if (filter === "texted") rows.sort((a, b) => (unread(b) - unread(a)) || String(b.last_reply_at).localeCompare(String(a.last_reply_at)));
+  else rows.sort((a, b) => order[stage(a)] - order[stage(b)] || a.last.localeCompare(b.last));
 
   $("list").innerHTML = rows.length ? rows.map(p => {
     const s = byId[stage(p)];
     const bits = [];
-    if (p.responded_at) bits.push(`Answered ${fmtTime(p.responded_at)} by ${p.responded_via === "sms" ? "text" : "link"}`);
-    if (p.open_count) bits.push(`Opened link ${p.open_count}× (last ${fmtTime(p.last_opened_at)})`);
-    else if (p.sent_at) bits.push(`Texted ${fmtTime(p.sent_at)}${p.delivery_status ? " · " + p.delivery_status : ""}`);
+    if (p.responded_at) bits.push(`Answered ${fmtTime(p.responded_at)} by ${viaLabel(p.responded_via)}`);
+    if (p.open_count) bits.push(`Opened link ${p.open_count}×`);
+    else if (p.sent_at && !p.responded_at) bits.push(`Texted ${fmtTime(p.sent_at)}${p.delivery_status ? " · " + p.delivery_status : ""}`);
     if (p.send_error) bits.push(`Error: ${esc(p.send_error)}`);
     const reply = p.last_reply ? `<div><span class="reply">“${esc(p.last_reply)}”</span> · ${fmtTime(p.last_reply_at)}</div>` : "";
-    return `<div class="row">
-      <div class="name">${esc(p.first)} ${esc(p.last)}${p.is_test ? "<small>test</small>" : ""}</div>
+    const chip = p.reply_count ? `<span class="chip ${unread(p) ? "unread" : ""}">${MSG}${p.reply_count}${unread(p) ? " new" : ""}</span>` : "";
+    return `<button class="row" data-id="${p.id}">
+      <div class="name">${esc(p.first)} ${esc(p.last)}${p.is_test ? "<small>test</small>" : ""}${chip}</div>
       <div class="meta">${bits.join(" · ") || "&nbsp;"}${reply}</div>
-      <div class="acts"><a href="sms:${p.phone}">Text</a><a href="tel:${p.phone}">Call</a><span style="color:var(--muted)">${fmtPhone(p.phone)}</span></div>
+      <div class="phone">${fmtPhone(p.phone)}</div>
       <span class="pill" style="color:${s.color};background:${s.bg}">${s.label}</span>
-    </div>`;
+    </button>`;
   }).join("") : `<div class="empty">Nobody here.</div>`;
+  document.querySelectorAll(".row[data-id]").forEach(r => r.onclick = () => openChat(+r.dataset.id));
 
   const um = data?.unmatched_replies || [];
   $("unmatched").innerHTML = um.length ? `<h2>Texts from numbers not on the list</h2><div class="list">${um.map(m =>
@@ -170,9 +255,99 @@ function render(){
     try { await navigator.clipboard.writeText(nums); toast(`Copied ${rows.length} numbers`); }
     catch { prompt("Copy these numbers", nums); }
   };
+  if (openId) renderChat();
 }
-function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
-function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("on"); setTimeout(() => el.classList.remove("on"), 1800); }
+
+/* ---------- chat ---------- */
+function openChat(id){
+  openId = id;
+  $("cText").value = ""; $("cErr").textContent = ""; autosize();
+  $("chat").classList.add("on"); $("scrim").classList.add("on"); $("chat").setAttribute("aria-hidden", "false");
+  document.body.classList.add("locked");
+  renderChat(true);
+}
+function closeChat(){
+  openId = null;
+  $("chat").classList.remove("on"); $("scrim").classList.remove("on"); $("chat").setAttribute("aria-hidden", "true");
+  document.body.classList.remove("locked");
+  render();
+}
+let lastThreadSig = "";
+function renderChat(forceScroll){
+  const p = (data?.invites || []).find(x => x.id === openId);
+  if (!p) return;
+  markSeen(p);
+  $("cWho").textContent = `${p.first} ${p.last}`;
+  $("cNum").innerHTML = `${fmtPhone(p.phone)}<a href="tel:${p.phone}">Call</a><a href="sms:${p.phone}">Text from my phone</a>`;
+  $("cStat").innerHTML = `<span>RSVP</span>` + [["going","Going"],["not_going","Can't go"],["pending","No answer"]].map(([v,l]) =>
+    `<button data-s="${v}" class="${p.status === v ? "cur-" + v : ""}">${l}</button>`).join("");
+  $("cStat").querySelectorAll("button").forEach(b => b.onclick = () => setStatus(p.id, b.dataset.s));
+
+  const t = p.thread || [];
+  const sig = t.length + "|" + (t.at(-1)?.at || "") + "|" + t.map(m => m.status || "").join(",");
+  if (sig === lastThreadSig && !forceScroll) return;
+  lastThreadSig = sig;
+  const el = $("cThread");
+  const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  let html = "", lastDay = "";
+  t.forEach((m, i) => {
+    const day = new Date(m.at).toDateString();
+    if (day !== lastDay) { html += `<div class="day">${new Date(m.at).toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" })}</div>`; lastDay = day; }
+    const failed = m.dir === "out" && (m.error || ["failed","undelivered"].includes(m.status));
+    const cls = m.dir === "in" ? "in" : `out ${m.kind || ""} ${failed ? "failed" : ""}`;
+    html += `<div class="b ${cls}">${linkify(m.body)}</div>`;
+    const next = t[i + 1];
+    if (!next || next.dir !== m.dir || (new Date(next.at) - new Date(m.at)) > 5 * 60000) {
+      let label = fmtTime(m.at);
+      if (m.dir === "out") {
+        const who = m.kind === "invite" ? "Invite" : m.kind === "auto" ? "Atlas auto-reply" : "You";
+        const st = failed ? `Not delivered${m.error ? " (" + esc(m.error) + ")" : ""}` : (m.status && m.status !== "auto-reply" ? m.status[0].toUpperCase() + m.status.slice(1) : "");
+        label = [who, label, st].filter(Boolean).join(" · ");
+      }
+      html += `<div class="stamp ${m.dir}">${label}</div>`;
+    }
+  });
+  el.innerHTML = html || `<div class="empty">No messages yet.</div>`;
+  if (forceScroll || nearBottom) el.scrollTop = el.scrollHeight;
+}
+
+async function api(path, body){
+  const r = await fetch(FN + path, { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": KEY }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+  return j;
+}
+async function send(){
+  const text = $("cText").value.trim();
+  if (!text || !openId) return;
+  $("cSend").disabled = true; $("cErr").textContent = "";
+  try {
+    await api("/reply", { invite_id: openId, body: text });
+    $("cText").value = ""; autosize();
+    await load(); renderChat(true);
+  } catch (e) {
+    $("cErr").textContent = "Didn't send: " + e.message;
+  } finally { updateCount(); }
+}
+async function setStatus(id, s){
+  try { await api("/set-status", { invite_id: id, status: s }); await load(); toast("RSVP updated"); }
+  catch (e) { toast("Couldn't update: " + e.message); }
+}
+function updateCount(){
+  const n = $("cText").value.length;
+  const gsm = /^[\x20-\x7E\n\r£¥èéùìòÇØøÅå_ÆæßÉ¤¡ÄÖÑÜ§¿äöñüà€]*$/.test($("cText").value);
+  const per = gsm ? (n > 160 ? 153 : 160) : (n > 70 ? 67 : 70);
+  $("cCount").textContent = n ? `${n} chars · ${Math.ceil(n / per)} text${Math.ceil(n / per) > 1 ? "s" : ""}` : "";
+  $("cSend").disabled = !$("cText").value.trim();
+}
+function autosize(){ const t = $("cText"); t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 140) + "px"; updateCount(); }
+
+$("cText").addEventListener("input", autosize);
+$("cText").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing && window.matchMedia("(hover:hover)").matches) { e.preventDefault(); send(); } });
+$("cSend").onclick = send;
+$("cClose").onclick = closeChat;
+$("scrim").onclick = closeChat;
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && openId) closeChat(); });
 
 async function load(){
   try {
@@ -193,7 +368,7 @@ function gate(msg){ $("app").innerHTML = `<div class="gate">${msg}</div>`; $("up
 if (!KEY) gate("This dashboard link is missing its key. Use the full link you were given.");
 else {
   load();
-  setInterval(() => { if (!document.hidden) load(); }, 15000);
+  setInterval(() => { if (!document.hidden) load(); }, 10000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
   $("refresh").onclick = load;
   $("q").oninput = render;
