@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>SAE Barbecue RSVP</title>
+<meta property="og:title" content="SAE Barbecue · Wed Nov 4, 5 to 8 PM">
+<meta property="og:description" content="Tap to RSVP">
+<style>
+  :root{
+    --purple:#4b2a7b; --purple-deep:#2e1650; --gold:#e3c26b; --gold-soft:#f6ecd0;
+    --ink:#1d1428; --muted:#6c6178; --card:#ffffff; --bg:#f4f0f8; --line:#e4dcef;
+    --go:#2f7d4f; --no:#8a3b3b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:0 16px 40px}
+  header{width:100%;max-width:440px;margin:0 -16px;background:linear-gradient(160deg,var(--purple),var(--purple-deep));color:#fff;border-radius:0 0 22px 22px;padding:34px 24px 30px;text-align:center;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--gold)}
+  .letters{font-family:Georgia,"Times New Roman",serif;font-size:15px;letter-spacing:.42em;color:var(--gold);margin-bottom:14px;padding-left:.42em}
+  h1{font-size:28px;line-height:1.15;font-weight:750;letter-spacing:-.01em}
+  .hi{margin-top:10px;font-size:17px;color:#ddd0f0;min-height:1.45em}
+  main{width:100%;max-width:440px;margin-top:-1px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:18px;box-shadow:0 1px 2px rgba(46,22,80,.05)}
+  .row{display:flex;gap:14px;align-items:flex-start;padding:10px 0}
+  .row + .row{border-top:1px solid var(--line)}
+  .ico{flex:none;width:36px;height:36px;border-radius:10px;background:var(--gold-soft);display:grid;place-items:center}
+  .ico svg{width:19px;height:19px;stroke:var(--purple);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .k{font-size:13px;color:var(--muted)}
+  .v{font-weight:650;font-size:17px}
+  .important{margin-top:18px;background:var(--gold-soft);border:1px solid #ead8a3;border-radius:14px;padding:14px 16px;font-weight:650;color:#5a4410;display:flex;gap:10px;align-items:flex-start}
+  .important svg{flex:none;width:20px;height:20px;margin-top:1px;stroke:#8a6a12;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .q{font-weight:700;font-size:18px;margin:22px 2px 12px}
+  .btns{display:grid;gap:12px}
+  button{appearance:none;border:0;border-radius:14px;font:inherit;font-size:18px;font-weight:700;padding:18px;cursor:pointer;transition:transform .08s ease, opacity .2s}
+  button:active{transform:scale(.98)}
+  button:disabled{opacity:.55;cursor:default}
+  .yes{background:var(--purple);color:#fff;box-shadow:0 4px 14px rgba(75,42,123,.28)}
+  .nope{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .done{text-align:center;padding:26px 20px}
+  .badge{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;margin:0 auto 12px}
+  .badge svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+  .done h2{font-size:22px;margin-bottom:6px}
+  .done p{color:var(--muted)}
+  .change{margin-top:16px;background:none;border:0;color:var(--purple);font-size:15px;font-weight:650;padding:8px;text-decoration:underline;text-underline-offset:3px;box-shadow:none}
+  .cal{display:inline-block;margin-top:14px;color:var(--purple);font-weight:650;font-size:15px}
+  .msg{color:var(--muted);text-align:center;margin-top:22px}
+  .err{color:var(--no);text-align:center;margin-top:12px;font-size:15px;min-height:1.2em}
+  .hidden{display:none}
+  .skel{display:inline-block;width:120px;height:1em;border-radius:6px;background:rgba(255,255,255,.18);vertical-align:-2px}
+</style>
+</head>
+<body>
+<header>
+  <div class="letters">ΣΑΕ</div>
+  <h1>SAE Barbecue</h1>
+  <div class="hi" id="hi"><span class="skel"></span></div>
+</header>
+<main>
+  <section class="card" aria-label="Event details">
+    <div class="row">
+      <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+      <div><div class="k">When</div><div class="v">Wednesday, Nov 4 · 5 to 8 PM</div></div>
+    </div>
+    <div class="row">
+      <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div>
+      <div><div class="k">Where</div><div class="v">The SAE house</div></div>
+    </div>
+    <div class="important">
+      <svg viewBox="0 0 24 24"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17.5v.01"/></svg>
+      <div>This one is very important. We really want you there, so please make it if you can.</div>
+    </div>
+  </section>
+
+  <section id="ask">
+    <div class="q">Can you make it?</div>
+    <div class="btns">
+      <button class="yes" id="btnYes">I'll be there</button>
+      <button class="nope" id="btnNo">I can't make it</button>
+    </div>
+    <div class="err" id="err" role="alert"></div>
+  </section>
+
+  <section id="done" class="card done hidden" aria-live="polite">
+    <div class="badge" id="badge"></div>
+    <h2 id="doneTitle"></h2>
+    <p id="doneText"></p>
+    <a class="cal hidden" id="cal" target="_blank" rel="noopener">Add it to Google Calendar</a><br>
+    <button class="change" id="change">Change my answer</button>
+  </section>
+
+  <p class="msg hidden" id="bad">This link isn't working. Just reply YES or NO to the text you got and we'll mark you down.</p>
+</main>
+
+<script>
+const SB_URL = "https://dvschwyfeuarpaoyfoko.supabase.co";
+const SB_KEY = "sb_publishable_WPDhozNdc55NGL76azocCA_iho3vl_Z";
+const token = new URLSearchParams(location.search).get("t") || "";
+const $ = (id) => document.getElementById(id);
+let first = "";
+
+async function rpc(fn, args){
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: SB_KEY },
+    body: JSON.stringify(args)
+  });
+  if (!r.ok) throw new Error("http " + r.status);
+  const rows = await r.json();
+  return rows[0] || null;
+}
+
+const CHECK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const X = '<svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+const CAL = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" +
+  encodeURIComponent("SAE Barbecue") + "&dates=20261104T230000Z/20261105T020000Z&location=" +
+  encodeURIComponent("SAE house") + "&details=" + encodeURIComponent("SAE barbecue, 5 to 8 PM");
+
+function show(status){
+  if (status === "going" || status === "not_going"){
+    const going = status === "going";
+    $("ask").classList.add("hidden");
+    $("done").classList.remove("hidden");
+    $("badge").innerHTML = going ? CHECK : X;
+    $("badge").style.background = going ? "var(--go)" : "var(--no)";
+    $("doneTitle").textContent = going ? `You're on the list${first ? ", " + first : ""}!` : `Thanks for letting us know${first ? ", " + first : ""}`;
+    $("doneText").textContent = going ? "See you Wednesday at 5 at the SAE house." : "If anything changes, come back to this link and tap I'll be there.";
+    $("cal").href = CAL;
+    $("cal").classList.toggle("hidden", !going);
+  } else {
+    $("done").classList.add("hidden");
+    $("ask").classList.remove("hidden");
+  }
+}
+
+async function answer(going){
+  $("err").textContent = "";
+  $("btnYes").disabled = $("btnNo").disabled = true;
+  try {
+    const row = await rpc("set_rsvp", { t: token, going });
+    if (!row) throw new Error("not found");
+    show(row.status);
+  } catch (e) {
+    $("err").textContent = "That didn't go through. Check your connection and try again, or just reply YES or NO to the text.";
+  } finally {
+    $("btnYes").disabled = $("btnNo").disabled = false;
+  }
+}
+
+$("btnYes").onclick = () => answer(true);
+$("btnNo").onclick = () => answer(false);
+$("change").onclick = () => show("pending");
+
+(async () => {
+  if (!token){ $("hi").textContent = "You're invited"; $("ask").classList.add("hidden"); $("bad").classList.remove("hidden"); return; }
+  try {
+    const row = await rpc("get_invite", { t: token });
+    if (!row){ $("hi").textContent = "You're invited"; $("ask").classList.add("hidden"); $("bad").classList.remove("hidden"); return; }
+    first = row.first_name;
+    $("hi").textContent = `Hey ${first}, you're invited`;
+    show(row.status);
+  } catch (e) {
+    $("hi").textContent = "You're invited";
+  }
+})();
+</script>
+</body>
+</html>

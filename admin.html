@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>BBQ RSVP Tracker</title>
+<style>
+  :root{
+    --purple:#4b2a7b; --purple-deep:#2e1650; --gold:#e3c26b; --gold-soft:#f6ecd0;
+    --ink:#1d1428; --muted:#6c6178; --card:#fff; --bg:#f4f0f8; --line:#e4dcef;
+    --go:#2f7d4f; --go-bg:#e3f2e8; --no:#a23b3b; --no-bg:#f8e3e3;
+    --open:#8a6a12; --open-bg:#f6ecd0; --wait:#5d5470; --wait-bg:#ece8f2; --fail:#b4441b; --fail-bg:#fbe5da;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  header{background:linear-gradient(160deg,var(--purple),var(--purple-deep));color:#fff;padding:22px 16px 20px;border-bottom:4px solid var(--gold)}
+  .wrap{max-width:980px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+  .eyebrow{font-family:Georgia,serif;letter-spacing:.35em;color:var(--gold);font-size:13px}
+  h1{font-size:24px;margin-top:4px}
+  .sub{color:#d8cbee;font-size:14px;margin-top:2px}
+  .updated{font-size:13px;color:#d8cbee;text-align:left}
+  @media (min-width:560px){.updated{text-align:right}}
+  .updated button{margin-top:6px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer}
+  main{padding:16px}
+  .bar{height:12px;border-radius:99px;overflow:hidden;display:flex;background:var(--wait-bg);margin:4px 0 16px}
+  .bar span{display:block;height:100%}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .tile{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+  .tile[aria-pressed="true"]{border-color:var(--purple);box-shadow:0 0 0 3px rgba(75,42,123,.15)}
+  .tile .n{font-size:28px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+  .tile .l{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .tools{display:flex;gap:10px;margin:16px 0 10px;flex-wrap:wrap;align-items:center}
+  .tools input[type=search]{flex:1 1 220px;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;background:#fff;color:var(--ink)}
+  .tools button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
+  .tools label{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center}
+  .list{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 14px;border-top:1px solid var(--line);align-items:center}
+  .row:first-child{border-top:0}
+  .name{font-weight:700}
+  .name small{font-weight:500;color:var(--muted);margin-left:6px}
+  .meta{grid-column:1/2;font-size:13px;color:var(--muted)}
+  .meta .reply{color:var(--ink);font-style:italic}
+  .pill{grid-row:1/3;grid-column:2;justify-self:end;font-size:13px;font-weight:700;padding:5px 10px;border-radius:99px;white-space:nowrap}
+  .acts{grid-column:1/2;display:flex;gap:12px;font-size:13px}
+  .acts a{color:var(--purple);font-weight:600;text-decoration:none}
+  .empty{padding:24px;text-align:center;color:var(--muted)}
+  .unmatched{margin-top:18px}
+  .unmatched h2{font-size:15px;margin-bottom:8px}
+  .gate{max-width:440px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--muted)}
+  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.on{opacity:1}
+  @media (min-width:720px){
+    .row{grid-template-columns:minmax(180px,1.2fr) 2fr auto auto;grid-template-rows:auto}
+    .meta{grid-column:auto}
+    .acts{grid-column:auto}
+    .pill{grid-row:auto;grid-column:auto}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <div>
+      <div class="eyebrow">ΣΑΕ</div>
+      <h1>BBQ RSVP Tracker</h1>
+      <div class="sub">Wednesday, Nov 4 · 5 to 8 PM · SAE house</div>
+    </div>
+    <div class="updated"><div id="updated">Loading…</div><button id="refresh">Refresh</button></div>
+  </div>
+</header>
+<main class="wrap" id="app">
+  <div class="bar" id="bar" aria-hidden="true"></div>
+  <div class="tiles" id="tiles"></div>
+  <div class="tools">
+    <input type="search" id="q" placeholder="Search name or number">
+    <button id="copy">Copy these numbers</button>
+    <label><input type="checkbox" id="showTest"> show test contact</label>
+  </div>
+  <div class="list" id="list"></div>
+  <div class="unmatched" id="unmatched"></div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL = "https://dvschwyfeuarpaoyfoko.supabase.co";
+const SB_KEY = "sb_publishable_WPDhozNdc55NGL76azocCA_iho3vl_Z";
+const KEY = new URLSearchParams(location.hash.slice(1)).get("k") || "";
+const $ = (id) => document.getElementById(id);
+
+const STAGES = [
+  { id: "going",    label: "Going",               color: "var(--go)",   bg: "var(--go-bg)" },
+  { id: "not_going",label: "Can't go",            color: "var(--no)",   bg: "var(--no-bg)" },
+  { id: "opened",   label: "Opened, no answer",   color: "var(--open)", bg: "var(--open-bg)" },
+  { id: "waiting",  label: "Hasn't opened",       color: "var(--wait)", bg: "var(--wait-bg)" },
+  { id: "failed",   label: "Text didn't deliver", color: "var(--fail)", bg: "var(--fail-bg)" },
+  { id: "unsent",   label: "Not texted yet",      color: "#9a93a6",     bg: "#f1eff4" },
+];
+const byId = Object.fromEntries(STAGES.map(s => [s.id, s]));
+let data = null, filter = "all";
+
+function stage(p){
+  if (p.status === "going") return "going";
+  if (p.status === "not_going") return "not_going";
+  if (p.send_error || ["failed","undelivered"].includes(p.delivery_status)) return "failed";
+  if (!p.sent_at) return "unsent";
+  if (p.open_count > 0) return "opened";
+  return "waiting";
+}
+const fmtTime = (iso) => {
+  if (!iso) return "";
+  const d = new Date(iso), now = new Date();
+  const t = d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  return d.toDateString() === now.toDateString() ? t : d.toLocaleDateString([], { weekday: "short" }) + " " + t;
+};
+const fmtPhone = (p) => { const m = p.match(/^\+1(\d{3})(\d{3})(\d{4})$/); return m ? `(${m[1]}) ${m[2]}-${m[3]}` : p; };
+
+function people(){
+  return (data?.invites || []).filter(p => $("showTest").checked || !p.is_test);
+}
+
+function render(){
+  const all = people();
+  const counts = Object.fromEntries(STAGES.map(s => [s.id, 0]));
+  all.forEach(p => counts[stage(p)]++);
+
+  $("bar").innerHTML = STAGES.filter(s => counts[s.id]).map(s =>
+    `<span style="width:${100*counts[s.id]/all.length}%;background:${s.color}" title="${s.label}"></span>`).join("");
+
+  const tiles = [{ id: "all", label: "Everyone", color: "var(--purple)" }, ...STAGES]
+    .filter(s => s.id === "all" || counts[s.id] || ["going","not_going","opened","waiting"].includes(s.id));
+  $("tiles").innerHTML = tiles.map(s => `
+    <button class="tile" data-f="${s.id}" aria-pressed="${filter === s.id}">
+      <div class="n">${s.id === "all" ? all.length : counts[s.id]}</div>
+      <div class="l"><span class="dot" style="background:${s.color}"></span>${s.label}</div>
+    </button>`).join("");
+  document.querySelectorAll(".tile").forEach(b => b.onclick = () => { filter = b.dataset.f; render(); });
+
+  const q = $("q").value.trim().toLowerCase();
+  const rows = all.filter(p => (filter === "all" || stage(p) === filter) &&
+    (!q || `${p.first} ${p.last} ${p.phone}`.toLowerCase().includes(q) || p.phone.replace(/\D/g,"").includes(q.replace(/\D/g,"") || "@@")));
+
+  const order = { going: 0, not_going: 1, opened: 2, waiting: 3, failed: 4, unsent: 5 };
+  rows.sort((a, b) => order[stage(a)] - order[stage(b)] || a.last.localeCompare(b.last));
+
+  $("list").innerHTML = rows.length ? rows.map(p => {
+    const s = byId[stage(p)];
+    const bits = [];
+    if (p.responded_at) bits.push(`Answered ${fmtTime(p.responded_at)} by ${p.responded_via === "sms" ? "text" : "link"}`);
+    if (p.open_count) bits.push(`Opened link ${p.open_count}× (last ${fmtTime(p.last_opened_at)})`);
+    else if (p.sent_at) bits.push(`Texted ${fmtTime(p.sent_at)}${p.delivery_status ? " · " + p.delivery_status : ""}`);
+    if (p.send_error) bits.push(`Error: ${esc(p.send_error)}`);
+    const reply = p.last_reply ? `<div><span class="reply">“${esc(p.last_reply)}”</span> · ${fmtTime(p.last_reply_at)}</div>` : "";
+    return `<div class="row">
+      <div class="name">${esc(p.first)} ${esc(p.last)}${p.is_test ? "<small>test</small>" : ""}</div>
+      <div class="meta">${bits.join(" · ") || "&nbsp;"}${reply}</div>
+      <div class="acts"><a href="sms:${p.phone}">Text</a><a href="tel:${p.phone}">Call</a><span style="color:var(--muted)">${fmtPhone(p.phone)}</span></div>
+      <span class="pill" style="color:${s.color};background:${s.bg}">${s.label}</span>
+    </div>`;
+  }).join("") : `<div class="empty">Nobody here.</div>`;
+
+  const um = data?.unmatched_replies || [];
+  $("unmatched").innerHTML = um.length ? `<h2>Texts from numbers not on the list</h2><div class="list">${um.map(m =>
+    `<div class="row"><div class="name">${fmtPhone(m.from)}</div><div class="meta"><span class="reply">“${esc(m.body)}”</span> · ${fmtTime(m.at)}</div></div>`).join("")}</div>` : "";
+
+  $("copy").onclick = async () => {
+    const nums = rows.map(p => p.phone).join(", ");
+    try { await navigator.clipboard.writeText(nums); toast(`Copied ${rows.length} numbers`); }
+    catch { prompt("Copy these numbers", nums); }
+  };
+}
+function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("on"); setTimeout(() => el.classList.remove("on"), 1800); }
+
+async function load(){
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/rpc/admin_dashboard`, {
+      method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY }, body: JSON.stringify({ k: KEY })
+    });
+    if (r.status === 401 || r.status === 403) { gate("This dashboard link is missing its key. Use the full link you were given."); return; }
+    if (!r.ok) throw new Error(r.status);
+    data = await r.json();
+    $("updated").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
+    render();
+  } catch (e) {
+    $("updated").textContent = "Couldn't refresh, retrying…";
+  }
+}
+function gate(msg){ $("app").innerHTML = `<div class="gate">${msg}</div>`; $("updated").textContent = ""; }
+
+if (!KEY) gate("This dashboard link is missing its key. Use the full link you were given.");
+else {
+  load();
+  setInterval(() => { if (!document.hidden) load(); }, 15000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+  $("refresh").onclick = load;
+  $("q").oninput = render;
+  $("showTest").onchange = render;
+}
+</script>
+</body>
+</html>
