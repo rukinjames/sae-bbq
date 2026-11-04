@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>SAE BBQ Guest List</title>
+<meta property="og:title" content="SAE Barbecue · Tonight's Guest List">
+<style>
+  :root{
+    --purple:#4b2a7b; --purple-deep:#2a1349; --purple-ink:#21103b; --gold:#e3c26b; --gold-deep:#b8952f; --gold-soft:#f6ecd0;
+    --ink:#1d1428; --muted:#6c6178; --card:#fff; --bg:#f4f0f8; --line:#e7e0f0; --go:#2f7d4f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--bg)}
+  body{background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+  .wrap{max-width:1080px;margin:0 auto;position:relative}
+
+  .hero{position:relative;overflow:hidden;color:#fff;background:
+      radial-gradient(1200px 400px at 85% -10%, rgba(227,194,107,.22), transparent 60%),
+      radial-gradient(900px 500px at -10% 120%, rgba(139,92,214,.35), transparent 60%),
+      linear-gradient(165deg,var(--purple),var(--purple-deep) 70%,var(--purple-ink));
+    padding:28px 16px 30px}
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--gold-deep))}
+  .toprow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .letters{font-size:14px;letter-spacing:.42em;color:var(--gold)}
+  .live{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#efe6fb;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:6px 11px;border-radius:99px}
+  .live i{width:8px;height:8px;border-radius:50%;background:#5fd38d;animation:pulse 2s infinite}
+  .live.stale i{background:#e3a24f;animation:none}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(95,211,141,.6)}70%{box-shadow:0 0 0 9px rgba(95,211,141,0)}100%{box-shadow:0 0 0 0 rgba(95,211,141,0)}}
+  .heroGrid{display:grid;grid-template-columns:1fr;gap:22px;margin-top:20px;align-items:end}
+  @media (min-width:820px){.heroGrid{grid-template-columns:1.3fr 1fr}}
+  .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+  h1{font-size:clamp(34px,7vw,52px);line-height:1.02;font-weight:500;margin-top:8px}
+  h1 em{font-style:italic;color:var(--gold)}
+  .details{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .details span{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:#ece3f8;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:7px 12px;border-radius:10px}
+  .details svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .count{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:18px 20px}
+  .count .big{display:flex;align-items:baseline;gap:10px}
+  .count .big b{font-size:60px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums}
+  .count .big span{font-size:16px;color:#d9cdee}
+  .split{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .split span{font-size:13px;color:#efe6fb;background:rgba(255,255,255,.1);border-radius:99px;padding:4px 10px}
+  .split b{color:#fff}
+
+  main{padding:0 16px 48px}
+  .controls{display:flex;gap:10px;margin:22px 0 16px;flex-wrap:wrap}
+  .search{flex:1 1 220px;position:relative}
+  .search input{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px 11px 38px;font:inherit;font-size:15px;background:#fff;color:var(--ink)}
+  .search input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(75,42,123,.12)}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 14px;font:inherit;font-weight:650;color:var(--ink);cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+  .btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  .sec{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 2px rgba(46,22,80,.04)}
+  .secH{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .secH .ic{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--gold-soft)}
+  .secH .ic svg{width:16px;height:16px;fill:none;stroke:#8a6a12;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .secH h2{font-size:16px;font-weight:750}
+  .secH .n{margin-left:auto;font-size:13px;font-weight:700;color:var(--muted)}
+  .secH .n b{font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;margin-right:4px}
+  .grid{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .p{display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid #f2eef7}
+  .num{flex:none;width:24px;text-align:right;font-size:13px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+  .av{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff}
+  .who{min-width:0;flex:1}
+  .nm{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sub{font-size:12.5px;color:var(--muted)}
+  .party{flex:none;font-size:12px;font-weight:800;background:var(--gold);color:var(--purple-ink);border-radius:99px;padding:3px 9px}
+  .vip .av{background:linear-gradient(140deg,var(--gold),var(--gold-deep));color:var(--purple-ink)}
+  .empty{padding:20px 16px;color:var(--muted);text-align:center}
+  .foot{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}
+  .gate{max-width:440px;margin:70px auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center;color:var(--muted)}
+  .skel{height:14px;border-radius:7px;background:linear-gradient(90deg,#eee9f4,#f7f4fa,#eee9f4);background-size:200% 100%;animation:sh 1.2s infinite;margin:14px 16px}
+  @keyframes sh{to{background-position:-200% 0}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+
+  @media print{
+    html,body{background:#fff}
+    .hero{background:#fff;color:#000;padding:0 0 10px}
+    .hero::after,.live,.controls,.foot{display:none}
+    .letters,.kicker,h1 em{color:#000}
+    .details span,.count,.split span{background:none;border:1px solid #ccc;color:#000}
+    .count .big span,.split b{color:#000}
+    .sec{box-shadow:none;break-inside:auto;border-color:#ccc}
+    .p{break-inside:avoid;padding:5px 10px}
+    .av{display:none}
+    main{padding:0}
+  }
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="wrap">
+    <div class="toprow">
+      <div class="letters serif">ΣΑΕ</div>
+      <div class="live" id="live"><i></i><span id="liveTxt">Live</span></div>
+    </div>
+    <div class="heroGrid">
+      <div>
+        <div class="kicker">Tonight</div>
+        <h1 class="serif">The <em>Guest List</em></h1>
+        <div class="details">
+          <span><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Wednesday, Nov 4</span>
+          <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>5 to 8 PM</span>
+          <span><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>The SAE house</span>
+        </div>
+      </div>
+      <div class="count">
+        <div class="big"><b id="total">–</b><span>people expected</span></div>
+        <div class="split" id="split"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap" id="app">
+  <div class="controls">
+    <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" id="q" placeholder="Find someone" aria-label="Find someone"></label>
+    <button class="btn" id="print"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"/></svg>Print</button>
+  </div>
+  <div id="sections"><div class="sec"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>
+  <p class="foot">Updates on its own. View only.</p>
+</main>
+
+<script>
+const SB_URL = "https://dvschwyfeuarpaoyfoko.supabase.co";
+const SB_KEY = "sb_publishable_WPDhozNdc55NGL76azocCA_iho3vl_Z";
+const KEY = new URLSearchParams(location.hash.slice(1)).get("v") || "";
+const $ = (id) => document.getElementById(id);
+let data = null, lastOk = 0;
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const AV = ["#4b2a7b","#6b3fa0","#2e5e8c","#2f7d4f","#8a5a14","#7a2f5a","#3f4c9a","#5b6b2a"];
+const hue = (s) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return AV[h % AV.length]; };
+const ini = (name) => name.replace(/[^A-Za-z ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+const ICONS = {
+  star: '<svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
+  team: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2c3 .2 5.5 2.6 5.5 5.8"/></svg>',
+  list: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+};
+
+function render(){
+  if (!data) return;
+  const q = $("q").value.trim().toLowerCase();
+  const match = (s) => !q || s.toLowerCase().includes(q);
+
+  // group extras by section, keep order of first appearance
+  const groups = [];
+  for (const e of data.extras) {
+    let g = groups.find(x => x.name === e.grp);
+    if (!g) groups.push(g = { name: e.grp, items: [] });
+    g.items.push(e);
+  }
+  const rushees = data.rushees;
+  const extrasTotal = data.extras.reduce((s, e) => s + e.party, 0);
+  $("total").textContent = rushees.length + extrasTotal;
+  $("split").innerHTML = [
+    ...groups.map(g => `<span><b>${g.items.reduce((s, e) => s + e.party, 0)}</b> ${esc(g.name.toLowerCase().startsWith("mike") ? g.name : g.name.toLowerCase())}</span>`),
+    `<span><b>${rushees.length}</b> rushees</span>`
+  ].join("");
+
+  let html = "";
+  groups.forEach(g => {
+    const n = g.items.reduce((s, e) => s + e.party, 0);
+    const isTeam = g.items.length === 1 && g.items[0].party > 1 && g.items[0].name === g.name;
+    const items = g.items.filter(e => match(e.name + " " + g.name));
+    html += `<section class="sec vip"><div class="secH"><span class="ic">${isTeam ? ICONS.team : ICONS.star}</span><h2>${esc(g.name)}</h2><span class="n"><b>${n}</b>${n === 1 ? "person" : "people"}</span></div>
+      <ul class="grid">${items.length ? items.map(e => `<li class="p">
+        <span class="av">${esc(ini(e.name))}</span>
+        <div class="who"><div class="nm">${esc(e.name)}</div><div class="sub">${
+          isTeam ? `${e.party} people` : e.party > 1 ? `Plus ${e.party - 1} guest${e.party > 2 ? "s" : ""}` : "Confirmed"}</div></div>
+        ${e.party > 1 ? `<span class="party">${isTeam ? "×" + e.party : "+" + (e.party - 1)}</span>` : ""}
+      </li>`).join("") : `<li class="empty">No match</li>`}</ul></section>`;
+  });
+
+  const rs = rushees.filter(p => match(`${p.first} ${p.last}`));
+  html += `<section class="sec"><div class="secH"><span class="ic" style="background:#e3f2e8">${ICONS.list.replace('stroke:#8a6a12', '')}</span><h2>Rushees</h2><span class="n"><b>${rushees.length}</b>people</span></div>
+    <ul class="grid">${rs.length ? rs.map(p => `<li class="p"><span class="num">${rushees.indexOf(p) + 1}</span>
+      <span class="av" style="background:${hue(p.first + p.last)}">${esc(ini(p.first + " " + p.last))}</span>
+      <div class="who"><div class="nm">${esc(p.first)} ${esc(p.last)}</div><div class="sub">Confirmed</div></div></li>`).join("")
+      : `<li class="empty">No match</li>`}</ul></section>`;
+  $("sections").innerHTML = html;
+  document.querySelectorAll(".sec:last-child .secH .ic svg").forEach(s => s.style.stroke = "var(--go)");
+}
+
+async function load(){
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/rpc/guest_list`, {
+      method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY }, body: JSON.stringify({ k: KEY })
+    });
+    if (r.status === 401 || r.status === 403) return gate();
+    if (!r.ok) throw new Error(r.status);
+    data = await r.json(); lastOk = Date.now();
+    $("live").classList.remove("stale"); $("liveTxt").textContent = "Live";
+    render();
+  } catch (e) {
+    if (Date.now() - lastOk > 30000) { $("live").classList.add("stale"); $("liveTxt").textContent = "Reconnecting"; }
+  }
+}
+function gate(){
+  document.querySelector(".count").style.visibility = "hidden";
+  $("app").innerHTML = `<div class="gate">This link isn't complete. Ask James for the full guest list link.</div>`;
+  $("live").style.display = "none";
+}
+$("q").oninput = render;
+$("print").onclick = () => window.print();
+if (!KEY) gate();
+else {
+  load();
+  setInterval(() => { if (!document.hidden) load(); }, 10000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+}
+</script>
+</body>
+</html>
