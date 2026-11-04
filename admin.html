@@ -190,7 +190,7 @@ const fmtTime = (iso) => {
   const t = d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   return d.toDateString() === now.toDateString() ? t : d.toLocaleDateString([], { weekday: "short" }) + " " + t;
 };
-const fmtPhone = (p) => { const m = (p||"").match(/^\+1(\d{3})(\d{3})(\d{4})$/); return m ? `(${m[1]}) ${m[2]}-${m[3]}` : p; };
+const fmtPhone = (p) => { if (!p) return "No number on file"; const m = p.match(/^\+1(\d{3})(\d{3})(\d{4})$/); return m ? `(${m[1]}) ${m[2]}-${m[3]}` : p; };
 const viaLabel = (v) => v === "sms" ? "text" : v === "james" ? "you" : "link";
 function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
 function linkify(s){ return esc(s).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>'); }
@@ -222,7 +222,7 @@ function render(){
 
   const q = $("q").value.trim().toLowerCase(), qd = q.replace(/\D/g, "");
   const rows = all.filter(p => (filter === "all" || (filter === "texted" ? p.reply_count > 0 : stage(p) === filter)) &&
-    (!q || `${p.first} ${p.last}`.toLowerCase().includes(q) || (qd && p.phone.replace(/\D/g,"").includes(qd))));
+    (!q || `${p.first} ${p.last}`.toLowerCase().includes(q) || (qd && (p.phone || "").replace(/\D/g,"").includes(qd))));
 
   const order = { going: 0, not_going: 1, opened: 2, waiting: 3, failed: 4, unsent: 5 };
   if (filter === "texted") rows.sort((a, b) => (unread(b) - unread(a)) || String(b.last_reply_at).localeCompare(String(a.last_reply_at)));
@@ -251,8 +251,9 @@ function render(){
     `<div class="row"><div class="name">${fmtPhone(m.from)}</div><div class="meta"><span class="reply">“${esc(m.body)}”</span> · ${fmtTime(m.at)}</div></div>`).join("")}</div>` : "";
 
   $("copy").onclick = async () => {
-    const nums = rows.map(p => p.phone).join(", ");
-    try { await navigator.clipboard.writeText(nums); toast(`Copied ${rows.length} numbers`); }
+    const withNum = rows.filter(p => p.phone);
+    const nums = withNum.map(p => p.phone).join(", ");
+    try { await navigator.clipboard.writeText(nums); toast(`Copied ${withNum.length} numbers`); }
     catch { prompt("Copy these numbers", nums); }
   };
   if (openId) renderChat();
@@ -278,7 +279,11 @@ function renderChat(forceScroll){
   if (!p) return;
   markSeen(p);
   $("cWho").textContent = `${p.first} ${p.last}`;
-  $("cNum").innerHTML = `${fmtPhone(p.phone)}<a href="tel:${p.phone}">Call</a><a href="sms:${p.phone}">Text from my phone</a>`;
+  $("cNum").innerHTML = p.phone
+    ? `${fmtPhone(p.phone)}<a href="tel:${p.phone}">Call</a><a href="sms:${p.phone}">Text from my phone</a>`
+    : `No number on file`;
+  $("cText").disabled = !p.phone;
+  $("cText").placeholder = p.phone ? "Text message" : "No number on file, can't text";
   $("cStat").innerHTML = `<span>RSVP</span>` + [["going","Going"],["not_going","Can't go"],["pending","No answer"]].map(([v,l]) =>
     `<button data-s="${v}" class="${p.status === v ? "cur-" + v : ""}">${l}</button>`).join("");
   $("cStat").querySelectorAll("button").forEach(b => b.onclick = () => setStatus(p.id, b.dataset.s));
