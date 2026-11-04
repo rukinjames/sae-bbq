@@ -159,7 +159,7 @@ function render(){
   $("total").textContent = rushees.length + extrasTotal;
   $("split").innerHTML = [
     ...groups.map(g => `<span><b>${g.items.reduce((s, e) => s + e.party, 0)}</b> ${esc(g.name.toLowerCase().startsWith("mike") ? g.name : g.name.toLowerCase())}</span>`),
-    `<span><b>${rushees.length}</b> rushees</span>`
+    `<span><b>${rushees.length}</b> brothers</span>`
   ].join("");
 
   let html = "";
@@ -177,7 +177,7 @@ function render(){
   });
 
   const rs = rushees.filter(p => match(`${p.first} ${p.last}`));
-  html += `<section class="sec"><div class="secH"><span class="ic" style="background:#e3f2e8">${ICONS.list.replace('stroke:#8a6a12', '')}</span><h2>Rushees</h2><span class="n"><b>${rushees.length}</b>people</span></div>
+  html += `<section class="sec"><div class="secH"><span class="ic" style="background:#e3f2e8">${ICONS.list.replace('stroke:#8a6a12', '')}</span><h2>Brothers</h2><span class="n"><b>${rushees.length}</b>people</span></div>
     <ul class="grid">${rs.length ? rs.map(p => `<li class="p"><span class="num">${rushees.indexOf(p) + 1}</span>
       <span class="av" style="background:${hue(p.first + p.last)}">${esc(ini(p.first + " " + p.last))}</span>
       <div class="who"><div class="nm">${esc(p.first)} ${esc(p.last)}</div><div class="sub">Confirmed</div></div></li>`).join("")
