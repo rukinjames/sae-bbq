@@ -117,7 +117,21 @@ const CAL = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" 
   encodeURIComponent("SAE Barbecue") + "&dates=20261104T230000Z/20261105T020000Z&location=" +
   encodeURIComponent("SAE house") + "&details=" + encodeURIComponent("SAE barbecue, 5 to 8 PM");
 
+let closed = false;
+function showClosed(status){
+  $("ask").classList.add("hidden");
+  $("done").classList.remove("hidden");
+  $("change").classList.add("hidden");
+  const going = status === "going";
+  $("badge").innerHTML = going ? CHECK : X;
+  $("badge").style.background = going ? "var(--go)" : "var(--muted)";
+  $("doneTitle").textContent = going ? `You're on the guest list${first ? ", " + first : ""}!` : "RSVPs are closed";
+  $("doneText").textContent = going ? "See you tonight at 5 at the SAE house." : "The guest list is final. Reach out to James directly if you have questions.";
+  $("cal").href = CAL;
+  $("cal").classList.toggle("hidden", !going);
+}
 function show(status){
+  if (closed) return showClosed(status);
   if (status === "going" || status === "not_going"){
     const going = status === "going";
     $("ask").classList.add("hidden");
@@ -128,6 +142,7 @@ function show(status){
     $("doneText").textContent = going ? "See you Wednesday at 5 at the SAE house." : "If anything changes, come back to this link and tap I'll be there.";
     $("cal").href = CAL;
     $("cal").classList.toggle("hidden", !going);
+    $("change").classList.remove("hidden");
   } else {
     $("done").classList.add("hidden");
     $("ask").classList.remove("hidden");
@@ -140,6 +155,7 @@ async function answer(going){
   try {
     const row = await rpc("set_rsvp", { t: token, going });
     if (!row) throw new Error("not found");
+    if (row.closed) closed = true;
     show(row.status);
   } catch (e) {
     $("err").textContent = "That didn't go through. Check your connection and try again, or just reply YES or NO to the text.";
@@ -158,7 +174,8 @@ $("change").onclick = () => show("pending");
     const row = await rpc("get_invite", { t: token });
     if (!row){ $("hi").textContent = "You're invited"; $("ask").classList.add("hidden"); $("bad").classList.remove("hidden"); return; }
     first = row.first_name;
-    $("hi").textContent = `Hey ${first}, you're invited`;
+    closed = !!row.closed;
+    $("hi").textContent = closed ? `Hey ${first}` : `Hey ${first}, you're invited`;
     show(row.status);
   } catch (e) {
     $("hi").textContent = "You're invited";
