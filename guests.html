@@ -68,6 +68,10 @@
   .who{min-width:0;flex:1}
   .nm{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .sub{font-size:12.5px;color:var(--muted)}
+  .ttl{font-size:13px;color:#5a4410;font-weight:600;line-height:1.3;margin:1px 0 2px}
+  .vip .nm{white-space:normal}
+  .vip .grid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+  @media (max-width:400px){.vip .grid{grid-template-columns:1fr}}
   .party{flex:none;font-size:12px;font-weight:800;background:var(--gold);color:var(--purple-ink);border-radius:99px;padding:3px 9px}
   .vip .av{background:linear-gradient(140deg,var(--gold),var(--gold-deep));color:var(--purple-ink)}
   .empty{padding:20px 16px;color:var(--muted);text-align:center}
@@ -170,8 +174,8 @@ function render(){
     html += `<section class="sec vip"><div class="secH"><span class="ic">${isTeam ? ICONS.team : ICONS.star}</span><h2>${esc(g.name)}</h2><span class="n"><b>${n}</b>${n === 1 ? "person" : "people"}</span></div>
       <ul class="grid">${items.length ? items.map(e => `<li class="p">
         <span class="av">${esc(ini(e.name))}</span>
-        <div class="who"><div class="nm">${esc(e.name)}</div><div class="sub">${
-          isTeam ? `${e.party} people` : e.party > 1 ? `Plus ${e.party - 1} guest${e.party > 2 ? "s" : ""}` : "Confirmed"}</div></div>
+        <div class="who"><div class="nm">${esc(e.name)}</div>${e.title ? `<div class="ttl">${esc(e.title)}</div>` : ""}<div class="sub">${
+          isTeam ? `${e.party} people` : e.party > 1 ? `Plus ${e.party - 1} colleague${e.party > 2 ? "s" : ""} from Student Conduct` : "Confirmed"}</div></div>
         ${e.party > 1 ? `<span class="party">${isTeam ? "×" + e.party : "+" + (e.party - 1)}</span>` : ""}
       </li>`).join("") : `<li class="empty">No match</li>`}</ul></section>`;
   });
